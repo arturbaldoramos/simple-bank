@@ -49,7 +49,7 @@ func TestGetTransfer(t *testing.T) {
 	require.Equal(t, transfer1.ToAccountID, transfer2.ToAccountID, "to account id should be the same")
 	require.Equal(t, transfer1.Amount, transfer2.Amount, "amount should be the same")
 
-	require.WithinDuration(t, transfer1.CreatedAt.Time, transfer2.CreatedAt.Time, time.Second, "created at should be the same")
+	require.WithinDuration(t, transfer1.CreatedAt, transfer2.CreatedAt, time.Second, "created at should be the same")
 }
 
 func TestListTransfers(t *testing.T) {

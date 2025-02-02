@@ -44,7 +44,7 @@ func TestGetEntry(t *testing.T) {
 	require.Equal(t, entry1.AccountID, entry2.AccountID, "account_id should be the same")
 	require.Equal(t, entry1.Amount, entry2.Amount, "amount should be the same")
 
-	require.WithinDuration(t, entry1.CreatedAt.Time, entry2.CreatedAt.Time, time.Second, "created at should be the same")
+	require.WithinDuration(t, entry1.CreatedAt, entry2.CreatedAt, time.Second, "created at should be the same")
 }
 
 func TestListEntries(t *testing.T) {
