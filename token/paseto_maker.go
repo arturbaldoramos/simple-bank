@@ -51,7 +51,7 @@ func (maker *PasetoMaker) VerifyToken(token string) (map[string]interface{}, err
 	// Descriptografa o token
 	parsedToken, err := parser.ParseV4Local(maker.symmetricKey, token, nil)
 	if err != nil {
-		return nil, fmt.Errorf("invalid token: %w", err)
+		return nil, err
 	}
 
 	// Verifica se o token expirou

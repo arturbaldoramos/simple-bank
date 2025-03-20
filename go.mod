@@ -3,6 +3,7 @@ module github.com/arturbaldoramos/simple-bank
 go 1.23.5
 
 require (
+	aidanwoods.dev/go-paseto v1.5.3
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-playground/validator/v10 v10.24.0
 	github.com/golang/mock v1.6.0
@@ -14,7 +15,6 @@ require (
 )
 
 require (
-	aidanwoods.dev/go-paseto v1.5.3 // indirect
 	aidanwoods.dev/go-result v0.1.0 // indirect
 	github.com/bytedance/sonic v1.12.8 // indirect
 	github.com/bytedance/sonic/loader v0.2.3 // indirect
