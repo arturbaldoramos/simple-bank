@@ -29,12 +29,11 @@ func NewPasetoMaker(symmetricKey string) (*PasetoMaker, error) {
 }
 
 // CreateToken creates a new token for a specific username and duration
-func (maker *PasetoMaker) CreateToken(username string, role string, duration time.Duration) (string, error) {
+func (maker *PasetoMaker) CreateToken(username string, duration time.Duration) (string, error) {
 	token := paseto.NewToken()
 
 	// Set claims (dados) no token
 	token.SetString("username", username)
-	token.SetString("role", role)
 	token.SetIssuedAt(time.Now())
 	token.SetExpiration(time.Now().Add(duration))
 
@@ -70,11 +69,6 @@ func (maker *PasetoMaker) VerifyToken(token string) (map[string]interface{}, err
 		return nil, fmt.Errorf("failed to get username: %w", err)
 	}
 
-	role, err := parsedToken.GetString("role")
-	if err != nil {
-		return nil, fmt.Errorf("failed to get role: %w", err)
-	}
-
 	issuedAt, err := parsedToken.GetIssuedAt()
 	if err != nil {
 		return nil, fmt.Errorf("failed to get token isued: %w", err)
@@ -82,7 +76,6 @@ func (maker *PasetoMaker) VerifyToken(token string) (map[string]interface{}, err
 
 	claims := make(map[string]interface{})
 	claims["username"] = username
-	claims["role"] = role
 	claims["issued_at"] = issuedAt
 	claims["expired_at"] = expiratedAt
 

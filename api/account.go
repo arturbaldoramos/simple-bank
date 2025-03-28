@@ -2,6 +2,7 @@ package api
 
 import (
 	"database/sql"
+	"errors"
 	"net/http"
 
 	db "github.com/arturbaldoramos/simple-bank/db/sqlc"
@@ -10,7 +11,6 @@ import (
 )
 
 type createAccountRequest struct {
-	Owner    string `json:"owner" binding:"required"`
 	Currency string `json:"currency" binding:"required,currency"`
 }
 
@@ -21,8 +21,9 @@ func (server *Server) createAccount(ctx *gin.Context) {
 		return
 	}
 
+	authClaims := ctx.MustGet(authorizationClaimsKey).(map[string]interface{})
 	arg := db.CreateAccountParams{
-		Owner:    req.Owner,
+		Owner:    authClaims["username"].(string),
 		Balance:  0,
 		Currency: req.Currency,
 	}
@@ -64,6 +65,12 @@ func (server *Server) getAccount(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
+	authClaims := ctx.MustGet(authorizationClaimsKey).(map[string]interface{})
+	if account.Owner != authClaims["username"].(string) {
+		err := errors.New("account doesn't belog to the authenticated user")
+		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+		return
+	}
 
 	ctx.JSON(http.StatusOK, account)
 }
@@ -81,7 +88,9 @@ func (server *Server) listAccount(ctx *gin.Context) {
 		return
 	}
 
+	authClaims := ctx.MustGet(authorizationClaimsKey).(map[string]interface{})
 	arg := db.ListAccountsParams{
+		Owner:  authClaims["username"].(string),
 		Limit:  req.PageSize,
 		Offset: (req.PageID - 1) * req.PageSize,
 	}
